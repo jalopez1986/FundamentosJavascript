@@ -17,7 +17,7 @@ class Juego {
         this.elegirColor = this.elegirColor.bind(this)
         this.siguienteNivel = this.siguienteNivel.bind(this)
 
-        btnEmpezar.classList.add('hide')
+        this.toogleBtnEmpezar()
 
         this.nivel = 1
         this.colores = {
@@ -28,12 +28,19 @@ class Juego {
         }
     }
 
+    toogleBtnEmpezar() {
+        if (btnEmpezar.classList.contains('hide')) {
+            btnEmpezar.classList.remove('hide')
+        } else {
+            btnEmpezar.classList.add('hide')
+        }
+    }
+
     generarSecuencia() {
         this.secuencia = new Array(ULTIMO_NIVEL).fill(0).map(n=>Math.floor(Math.random() * 4));
     }
 
     siguienteNivel() {
-        debugger;
         this.subNivel = 0
         this.iluminarSecuencia();
         //this.agregarEventosClick()
@@ -107,7 +114,7 @@ class Juego {
                 this.eliminarEventosClickWithMap()
 
                 if (this.nivel === (ULTIMO_NIVEL + 1)) {
-                    //ganó
+                    this.ganoElJuego()
                 } else {
                     setTimeout(() => {
                         this.siguienteNivel()
@@ -116,10 +123,25 @@ class Juego {
                 }
             }
         } else {
-            //perdio
-        }
-
+            this.perdioElJuego()
+        } 
     }
+
+    ganoElJuego() {
+        swal('Platzi', 'Felicitaciones, ganaste el juego!', 'success')
+        .then(() => {
+            this.inicializar()
+        })
+    }
+
+    perdioElJuego() {
+        swal('Platzi', 'Lo lamentamos, perdiste :(', 'error').then( () => {
+            this.eliminarEventosClickWithMap()
+            this.inicializar()
+        })
+    }
+
+
 
     transformarColorANumero(color) {
         switch (color) {
